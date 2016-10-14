@@ -1,14 +1,14 @@
 <?php
+
 require_once __DIR__ . '/autoload.php';
-require_once __DIR__ . '/functions.php';
-require_once __DIR__ . '/config/routing.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing;
+use Symfony\Component\HttpKernel;
 use Whoops\Run;
 use Whoops\Handler\PrettyPageHandler;
+
 /**
  * Error handler
  */
@@ -17,17 +17,12 @@ $whoops->pushHandler(new PrettyPageHandler);
 $whoops->register();
 
 $request = Request::createFromGlobals();
-$response = new Response();
+$routes = include __DIR__ . '/config/routing.php';
 
-$context = new RequestContext();
+$context = new Routing\RequestContext();
 $context->fromRequest($request);
-$matcher = new UrlMatcher($routes, $context);
+$matcher = new Routing\Matcher\UrlMatcher($routes, $context);
+$resolver = new HttpKernel\Controller\ControllerResolver();
 
-try {
-     $request->attributes->add($matcher->match($request->getPathInfo()));
-     $response = call_user_func($request->attributes->get('_controller'), $request);
-} catch (Routing\Exception\ResourceNotFoundException $e) {
-    $response = new Response('Not Found', 404);
-} catch (Exception $e) {
-	 throw new Exception($e->getMessage());
-}
+$framework = new Dot\Core\Framework($matcher, $resolver);
+$response = $framework->handle($request);

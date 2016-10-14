@@ -1,13 +1,11 @@
-<?php
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Route;
+<?php 
 
+use Symfony\Component\Routing;
 
-$routes = new RouteCollection();
+$routes = new Routing\RouteCollection();
+$routes->add('leap_year', new Routing\Route(
+	'/is_leap_year/{year}', 
+	array('year' => null, '_controller' => 'Dot\\Calendar\\Controller\\LeapYearController::indexAction'))
+);
 
-$routes->add('hello', new Symfony\Component\Routing\Route('/hello/{name}', array(
-    'name' => 'World',
-    '_controller' => function ($request) {
-        return render_template($request);
-    }
-)));
+return $routes;

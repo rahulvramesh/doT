@@ -9,13 +9,14 @@
         }
     ],
     "autoload": {
-        "psr-4": { "": "app/" }
+        "psr-4": { "Dot\\Core\\": "app/code/Dot/Core","Dot\\Calendar\\": "app/code/Dot/Calendar"}
     },
     "minimum-stability": "dev",
     "require": {
         "symfony/class-loader": "^3.1",
         "symfony/http-foundation": "^3.1",
         "symfony/routing": "^3.1",
-        "filp/whoops": "^2.1"
+        "filp/whoops": "^2.1",
+        "symfony/http-kernel": "^3.1"
     }
 }
