@@ -7,7 +7,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
-
+use Whoops\Run;
+use Whoops\Handler\PrettyPageHandler;
+/**
+ * Error handler
+ */
+$whoops = new Run;
+$whoops->pushHandler(new PrettyPageHandler);
+$whoops->register();
 
 $request = Request::createFromGlobals();
 $response = new Response();
@@ -22,7 +29,5 @@ try {
 } catch (Routing\Exception\ResourceNotFoundException $e) {
     $response = new Response('Not Found', 404);
 } catch (Exception $e) {
-
-	print_r($e);
-    //$response = new Response('An error occurred', 500);
+	 throw new Exception($e->getMessage());
 }
