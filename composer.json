@@ -1,0 +1,20 @@
+{
+    "name": "rahulvramesh/dot",
+    "description": "HMVC Framework Built Using Symfony",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Rahul V Ramesh",
+            "email": "rahulvramesh@hotmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "": "app/" }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "symfony/class-loader": "^3.1",
+        "symfony/http-foundation": "^3.1",
+        "symfony/routing": "^3.1"
+    }
+}
