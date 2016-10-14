@@ -1,25 +1,28 @@
 <?php
 require_once __DIR__ . '/autoload.php';
+require_once __DIR__ . '/config/routing.php';
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+
 
 $request = Request::createFromGlobals();
 $response = new Response();
 
-/* Create routes... */
-$map = array(
-    '/hello' => __DIR__.'/code/Msl/Static/view/hello.php'
-);
+$context = new RequestContext();
+$context->fromRequest($request);
+$matcher = new UrlMatcher($routes, $context);
 
-/* Handle the request and create the response */
-$path = $request->getPathInfo();
-
-
-if (isset($map[$path])) {
+try {
+    extract($matcher->match($request->getPathInfo()), EXTR_SKIP);
     ob_start();
-    include $map[$path];
-    $response->setContent(ob_get_clean());
-} else {
-    $response = new Response('Not found', 404);
+    include sprintf(__DIR__.'/code/pages/%s.php', $_route);
+
+    $response = new Response(ob_get_clean());
+} catch (Routing\Exception\ResourceNotFoundException $e) {
+    $response = new Response('Not Found', 404);
+} catch (Exception $e) {
+    $response = new Response('An error occurred', 500);
 }
