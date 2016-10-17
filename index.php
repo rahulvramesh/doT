@@ -1,8 +1,10 @@
 <?php
 
+ini_set('display_startup_errors', 1);
+ini_set('display_errors', 1);
+error_reporting(-1);
+
 require_once __DIR__.'/app/bootstrap.php';
 
-$input = $request->get('name', 'World');
-
-$response->setContent(sprintf('Hello %s', htmlspecialchars($input, ENT_QUOTES, 'UTF-8')));
+/* Send the response */
 $response->send();
